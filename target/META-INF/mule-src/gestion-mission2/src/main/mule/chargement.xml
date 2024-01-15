@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="chargerDemandeMission" doc:id="d5db53d5-64a4-4033-9b7b-3ad39464d8b9" >
+		<http:listener doc:name="Listener" doc:id="7361831b-73c7-47eb-aa29-8100efca122c" config-ref="HTTP_Listener_config" path="/select-demandes-mission"/>
+		<db:select doc:name="ChargerDemandeMission" doc:id="546b4a40-d907-47d8-866a-3ab5fd5faaf5" config-ref="Database_Config">
+			<db:sql ><![CDATA[SELECT * from demandeDeMission;]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="d7522c60-e97a-4058-a182-ab01f941aa23" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+
+---
+payload map ( payload01 , indexOfPayload01 ) -> {
+	nom: payload01.nom,
+	prenom: payload01.prenom,
+	titre: payload01.titre,
+	description: payload01.description,
+	transport: payload01.transport,
+	userid: payload01.userid,
+	duree: payload01.duree,
+	lieu: payload01.lieu
+	
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="chargerMissionActuelle" doc:id="1d1c4325-bfd9-48d5-86b3-46ab95d5c53a" >
+		<http:listener doc:name="Listener" doc:id="ce33c8b5-75b6-4cc6-9f9b-a068b065475f" config-ref="HTTP_Listener_config" path="/select-mission-actuelle" />
+		<db:select doc:name="ChargerMissionActuelle" doc:id="bf982b96-97c1-40df-ac24-304777d745f3" config-ref="Database_Config" >
+			<db:sql ><![CDATA[SELECT titre
+FROM Mission
+WHERE actuelle = 0;]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="c9b971dc-38dc-4053-ad01-b37cfde96df5" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+
+---
+payload map ( payload01 , indexOfPayload01 ) -> {
+	titre: payload01.titre
+	
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="chargerMissionNonRemboursee" doc:id="91ac5674-ba17-4ecf-867e-a7bea81eebb2" >
+		<http:listener doc:name="Listener" doc:id="9c774565-e396-4471-8bcd-2dfc04d3db28" config-ref="HTTP_Listener_config" path="/select-mission-non-remboursee" />
+		<db:select doc:name="ChargerMissionNonRemboursee" doc:id="7da614c1-8954-4ea5-b906-232e425a335b" config-ref="Database_Config" >
+			<db:sql ><![CDATA[SELECT titre
+FROM Mission
+WHERE remboursee = 0;]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="3b69bb5d-357f-40a2-b3b2-32f8c71fa8ea" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+
+---
+payload map ( payload01 , indexOfPayload01 ) -> {
+	titre: payload01.titre
+	
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="chargerDemandeRemboursement" doc:id="48cca8c9-09af-448e-b7bb-6fab850e0731" >
+		<http:listener doc:name="Listener" doc:id="fe1d779f-0150-443c-9eb9-eb4260af4a7b" config-ref="HTTP_Listener_config" path="/select-demandes-remboursement" />
+		<db:select doc:name="ChargerDemandeMission" doc:id="21e9c4e0-45ed-402e-9d4b-5e7f1b60ff4e" config-ref="Database_Config" >
+			<db:sql ><![CDATA[SELECT * from demandeRemboursement;]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="814eddea-746f-4f34-9a6f-3ab416ca3655" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+
+---
+payload map ( payload01 , indexOfPayload01 ) -> {
+	id: payload01.userid,
+	nom: payload01.nom,
+	prenom: payload01.prenom,
+	mission_id: payload01.mission_id,
+	frais: payload01.frais,
+	etat: payload01.etat_remboursement,
+	
+	
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

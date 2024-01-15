@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="4bfe7af6-f72b-417e-9840-46a8bc7950a6" >
+		<http:listener-connection host="0.0.0.0" port="8082" />
+	</http:listener-config>
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="577d2f92-db90-4fd3-ab2a-1afe5c13a880" >
+		<db:my-sql-connection host="localhost" port="3306" user="root" password="password" database="mission" />
+	</db:config>
+	<flow name="insertionDemandeMission" doc:id="6cc5b7fd-4939-4bfd-abb2-7a8109ace6b5" >
+		<http:listener doc:name="Listener" doc:id="770bbbc9-6021-434b-b5e7-4feac9573a3e" config-ref="HTTP_Listener_config" path="/insert-demande-mission"/>
+		<db:insert doc:name="InsertDemandeMission" doc:id="0939acfe-4f17-495b-946a-321589bc939a" config-ref="Database_Config">
+			<db:sql ><![CDATA[insert into demandeDeMission values(:nom,:prenom,:titre,:description,:transport,:userid,:duree,:lieu, :etat, :dateRetour)]]></db:sql>
+			<db:input-parameters ><![CDATA[#[payload]]]></db:input-parameters>
+		</db:insert>
+	</flow>
+	<flow name="insertionMission" doc:id="ea5e1049-1544-427a-ab14-8cf19379fa2e" >
+		<http:listener doc:name="Listener" doc:id="2ecd2ed4-32ee-4f95-bcee-4508b917e11a" config-ref="HTTP_Listener_config" path="/insert-mission" />
+		<db:insert doc:name="InsertMission" doc:id="dcd919da-c62d-48f7-829b-5572ba578c72" config-ref="Database_Config" >
+			<db:sql ><![CDATA[insert into Mission values(:mission_id,:titre,:description,:duree,:lieu)]]></db:sql>
+			<db:input-parameters ><![CDATA[#[payload]]]></db:input-parameters>
+		</db:insert>
+	</flow>
+	<flow name="insertionDemandeRetour" doc:id="c6983dcc-8192-498c-a865-7b18dfacc432" >
+		<http:listener doc:name="Listener" doc:id="4833e6f3-c248-4041-8ed3-9aaeafb73eb4" config-ref="HTTP_Listener_config" path="/insert-demande-retour" />
+		<db:update doc:name="InsertDemandeRetour" doc:id="44ad9673-fdee-40f4-860a-ce04feb4aea1" config-ref="Database_Config">
+			<db:sql ><![CDATA[update demandeDeMission
+SET retour= :retour, motif= :motif where userid= :userid]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+    "userid": payload.userid,
+    "retour": payload.retour,
+    "motif": payload.motif
+}]]]></db:input-parameters>
+		</db:update>
+	</flow>
+	<flow name="insertionDemandeRemboursement" doc:id="2991b34b-4302-4ae3-85c4-575b6e81b24c" >
+		<http:listener doc:name="Listener" doc:id="55ace51b-22d2-4c5a-8dc5-4927fc1d81cd" config-ref="HTTP_Listener_config" path="/insert-demande-remboursement" />
+		<db:insert doc:name="InsertDemandeRemboursement" doc:id="33f76e6b-0aec-462b-92a9-7bc5d4b1565b" config-ref="Database_Config" >
+			<db:sql ><![CDATA[insert into demanderemboursement values(:userid,:nom,:prenom,:mission_id,:frais, :etat_remboursement)]]></db:sql>
+			<db:input-parameters ><![CDATA[#[payload]]]></db:input-parameters>
+		</db:insert>
+	</flow>
+	<flow name="SignUP" doc:id="0cfb82bd-af13-41ba-9b56-006074e2031d" >
+		<http:listener doc:name="Listener" doc:id="0f1d32fd-94bb-4087-8eea-ccff957293c3" config-ref="HTTP_Listener_config" path="/sign-up" />
+		<db:insert doc:name="Sign UP" doc:id="91166c3a-1097-4007-ad0b-740f2175a3cd" config-ref="Database_Config" >
+			<db:sql ><![CDATA[insert into User values(:nom,:prenom,:userid)]]></db:sql>
+			<db:input-parameters ><![CDATA[#[payload]]]></db:input-parameters>
+		</db:insert>
+	</flow>
+</mule>

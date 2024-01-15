@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<flow name="miseAjourDemande" doc:id="fbe23185-472f-43d4-a1ce-d7b306eb4121" >
+		<http:listener doc:name="Listener" doc:id="9431c499-bbfd-4b05-81e4-e11096a0a4aa" config-ref="HTTP_Listener_config" path="/update-mission-demende"/>
+		<db:update doc:name="Update" doc:id="c81799fb-6399-41ce-ba93-c73b569eae2b" config-ref="Database_Config">
+			<db:sql ><![CDATA[update demandeDeMission
+SET nom= :nom, prenom= :prenom, titre= :titre, description= :description, transport= :transport, duree= :duree, lieu= :lieu where userid= :userid]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+	"userid": payload.userid,
+    "nom": payload.nom,
+    "prenom": payload.prenom,
+    "titre": payload.titre,
+    "description": payload.description,
+    "transport": payload.transport,
+    "duree": payload.duree,
+    "lieu": payload.lieu
+}]]]></db:input-parameters>
+		</db:update>
+	</flow>
+	<flow name="UpdateEtatDemande" doc:id="e87eabd9-e250-48e0-9b82-2e91b4a6b6aa" >
+		<http:listener doc:name="Listener" doc:id="e16e23f5-5d3f-4e53-8116-f1506cae06c0" config-ref="HTTP_Listener_config" path="/update-etat-demende" />
+		<db:update doc:name="UpdateEtat" doc:id="65f66bae-6602-4503-9b18-f6ff7d770161" config-ref="Database_Config" >
+			<db:sql ><![CDATA[update demandeDeMission
+SET etat= :etat where userid= :userid]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+	"userid": payload.userid,
+    "etat": payload.etat
+}]]]></db:input-parameters>
+		</db:update>
+	</flow>
+	<flow name="UpdateDateRetour" doc:id="c71288e3-0065-4c57-99db-12c9a2a38259" >
+		<http:listener doc:name="Listener" doc:id="8ffad086-6b93-427b-a608-5bf7d51a61b6" config-ref="HTTP_Listener_config" path="/update-date-retour" />
+		<db:update doc:name="UpdateDateRetour" doc:id="5a9acf46-7c1b-427b-b04b-72852bd15f07" config-ref="Database_Config" >
+			<db:sql ><![CDATA[update demandeDeMission
+SET dateRetour= :dateRetour where userid= :userid]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+	"userid": payload.userid,
+    "dateRetour": payload.dateRetour
+}]]]></db:input-parameters>
+		</db:update>
+	</flow>
+	<flow name="UpdateEtatRemboursement" doc:id="6a584e6d-be7e-43f6-8614-ecb25915df94" >
+		<http:listener doc:name="Listener" doc:id="152c9778-c39f-4172-bb1d-68cc37cfbb93" config-ref="HTTP_Listener_config" path="/update-etat-remboursement" />
+		<db:update doc:name="UpdateEtatRemboursement" doc:id="3657ff26-0689-46b5-87b6-b12484614e0c" config-ref="Database_Config" >
+			<db:sql ><![CDATA[update demandeRemboursement
+SET etat_remboursement= :etat_remboursement where userid= :userid and mission_id= :mission_id]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+	"userid": payload.userid,
+    "mission_id": payload.mission_id,
+    "etat_remboursement": payload.etat_remboursement
+}]]]></db:input-parameters>
+		</db:update>
+	</flow>
+</mule>

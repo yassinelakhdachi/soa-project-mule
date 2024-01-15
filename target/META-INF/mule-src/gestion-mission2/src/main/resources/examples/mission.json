@@ -1,0 +1,42 @@
+[
+    {
+        "nom": "Smith",
+        "prenom": "John",
+        "titre": "Business Trip",
+        "description": "Attending a conference",
+        "transport": "Airplane",
+        "userid": 5,
+        "duree": 3,
+        "lieu": "New York"
+    },
+    {
+        "nom": "Johnson",
+        "prenom": "Emily",
+        "titre": "Client Meeting",
+        "description": "Meeting with important client",
+        "transport": "Train",
+        "userid": 6,
+        "duree": 2,
+        "lieu": "Chicago"
+    },
+    {
+        "nom": "Brown",
+        "prenom": "Michael",
+        "titre": "Project Site Visit",
+        "description": "Inspecting project site",
+        "transport": "Car",
+        "userid": 7,
+        "duree": 5,
+        "lieu": "Los Angeles"
+    },
+    {
+        "nom": "Davis",
+        "prenom": "Sophia",
+        "titre": "Training Session",
+        "description": "Attending a training session",
+        "transport": "Airplane",
+        "userid": 8,
+        "duree": 4,
+        "lieu": "San Francisco"
+    }
+]

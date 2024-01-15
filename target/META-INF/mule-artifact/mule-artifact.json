@@ -1,0 +1,33 @@
+{
+  "configs": [
+    "chargement.xml",
+    "insertion.xml",
+    "miseAjour.xml"
+  ],
+  "secureProperties": [],
+  "redeploymentEnabled": true,
+  "name": "com.mycompany:gestion-mission2:1.0.0-SNAPSHOT",
+  "minMuleVersion": "4.5.0",
+  "requiredProduct": "MULE_EE",
+  "classLoaderModelLoaderDescriptor": {
+    "id": "mule",
+    "attributes": {
+      "exportedPackages": [],
+      "exportedResources": [
+        "application-types.xml",
+        "chargement.xml",
+        "examples/demande-remboursement.json",
+        "examples/mission.json",
+        "examples/titre-misson-1.json",
+        "examples/titre-misson.json",
+        "insertion.xml",
+        "log4j2.xml",
+        "miseAjour.xml"
+      ]
+    }
+  },
+  "bundleDescriptorLoader": {
+    "id": "mule",
+    "attributes": {}
+  }
+}

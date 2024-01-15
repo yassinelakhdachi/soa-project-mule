@@ -1,0 +1,50 @@
+[
+    {
+        "id": 1,
+        "nom": "Dupont",
+        "prenom": "Jean",
+        "mission_id": 101,
+        "frais": 500,
+        "etat": "En attente"
+    },
+    {
+        "id": 2,
+        "nom": "Martin",
+        "prenom": "Sophie",
+        "mission_id": 102,
+        "frais": 700,
+        "etat": "Approuvé"
+    },
+    {
+        "id": 3,
+        "nom": "Dubois",
+        "prenom": "Pierre",
+        "mission_id": 103,
+        "frais": 300,
+        "etat": "En attente"
+    },
+    {
+        "id": 4,
+        "nom": "Lefevre",
+        "prenom": "Isabelle",
+        "mission_id": 104,
+        "frais": 1000,
+        "etat": "En cours"
+    },
+    {
+        "id": 5,
+        "nom": "Garcia",
+        "prenom": "Maria",
+        "mission_id": 105,
+        "frais": 450,
+        "etat": "Refusé"
+    },
+    {
+        "id": 9,
+        "nom": "Smith",
+        "prenom": "John",
+        "mission_id": 101,
+        "frais": 500,
+        "etat": "Approuvé"
+    }
+]
